@@ -4,7 +4,7 @@ import { QuizState, Archetype } from '../types/quiz';
 import { quizQuestions } from '../data/questions';
 import { calculateResult, trackEvent } from '../utils/quizLogic';
 import { ProgressBar } from './ProgressBar';
-import { sendToMakeCom } from '../utils/webhook';
+import { sendToMakeCom, testWebhookConnection } from '../utils/webhook';
 
 interface QuizProps {
   onBackToLanding: () => void;
@@ -44,6 +44,11 @@ export const Quiz: React.FC<QuizProps> = ({ onBackToLanding }) => {
       trackEvent('quiz_started');
     }
   }, [quizState.currentQuestion, quizState.answers.length]);
+
+  // Debug webhook connection on component mount
+  React.useEffect(() => {
+    testWebhookConnection();
+  }, []);
 
   const handleAnswer = (archetype: Archetype) => {
     const newAnswers = [...quizState.answers, archetype];
